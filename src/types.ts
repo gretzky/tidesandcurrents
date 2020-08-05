@@ -65,3 +65,10 @@ export interface ReturnData {
   v: string;
   type?: string;
 }
+
+export interface StationMetadata {
+  id: number | string;
+  name: string;
+  lat: string;
+  long: string;
+}

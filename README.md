@@ -44,3 +44,21 @@ const yesterdaysTidePredictions = tidesandcurrents.tidePredictions(8410140, '202
 //   { t: '2020-08-05 19:10', v: '0.786', type: 'L' }
 // ]
 ```
+
+### `stationMetadata(stationId: number)`
+
+Gets station metadata info -- id, name, latitude, and longitude.
+
+```js
+import tidesandcurrents from 'tidesandcurrents'
+
+const stationMetadata = tidesandcurrents.stationMetadata(8410140)
+
+// returns
+// {
+//   id: '8410140',
+//   name: 'Eastport',
+//   lat: '44.9046',
+//   long: '-66.9829'
+// }
+```

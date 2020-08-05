@@ -1,5 +1,13 @@
 import axios, { AxiosResponse } from "axios";
-import { Params, TimeZones, Products, Datum, Units, ReturnData } from "./types";
+import {
+  Params,
+  TimeZones,
+  Products,
+  Datum,
+  Units,
+  ReturnData,
+  StationMetadata,
+} from "./types";
 
 // converts today to 'yyyymmdd' for use in begin_date and end_date params
 const now: string = new Date()
@@ -67,8 +75,27 @@ const tidePredictions = (
   });
 };
 
+const stationMetadata = (
+  stationId: number | string
+): Promise<StationMetadata> => {
+  return get(stationId, {
+    product: "air_temperature",
+    date: "latest",
+  }).then(res => {
+    if (!res || !res.data) {
+      throw new Error("Something went wrong.");
+    }
+    if (!res.data.metadata) {
+      throw new Error(`Could not get metadata for station ${stationId}.`);
+    }
+
+    return res.data.metadata;
+  });
+};
+
 export default {
   get,
   tidePredictions,
+  stationMetadata,
   now,
 };
