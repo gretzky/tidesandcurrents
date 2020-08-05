@@ -1,6 +1,6 @@
 # NOAA Tides and Currents API
 
-This module is a small wrapper around the [NOAA Tides and Currents API](https://api.tidesandcurrents.noaa.gov/api/prod).
+Node wrapper around the [NOAA Tides and Currents API](https://api.tidesandcurrents.noaa.gov/api/prod).
 
 ## Usage
 
