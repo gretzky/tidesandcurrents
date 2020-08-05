@@ -17,7 +17,10 @@ All params valid to pass can be found [here](https://api.tidesandcurrents.noaa.g
 import tidesandcurrents from 'tidesandcurrents'
 
 // the `now` method returns today's date as 'yyyymmdd'.
-const currentAirTemperature = tidesandcurrents.get(8410140, tidesandcurrents.now)
+const currentAirTemperature = tidesandcurrents.get(8410140, {
+  product: 'air_temperature',
+  date: tidesandcurrents.now
+});
 ```
 
 ### `tidePredictions(stationId: number, date?: string)`
