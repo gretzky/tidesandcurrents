@@ -63,3 +63,22 @@ const stationMetadata = tidesandcurrents.stationMetadata(8410140)
 //   longitude: '-66.9829'
 // }
 ```
+
+### `currentWaterLevel(stationId: number)`
+
+Gets the current water level for a given station.
+
+```js
+import tidesandcurrents from 'tidesandcurrents'
+
+const currentWaterLevel = tidesandcurrents.currentWaterLevel(8410140)
+
+// return
+// {
+//   "f": "0,0,0,0",
+//   "q": "p",
+//   "s": "0.072",
+//   "t": "2020-08-06 16:06",
+//   "v": "7.151",
+// }
+```
