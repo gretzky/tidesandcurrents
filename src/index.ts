@@ -108,9 +108,20 @@ const stationMetadata = (
     });
 };
 
+const currentWaterLevel = (
+  stationId: number | string
+): Promise<ReturnData> => {
+  return get(stationId, {
+    date: 'latest',
+    datum: 'MLLW',
+    product: 'water_level'
+  }).then(res => res.data.data[0])
+}
+
 export default {
   get,
   tidePredictions,
   stationMetadata,
+  currentWaterLevel,
   now,
 };
