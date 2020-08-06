@@ -79,30 +79,33 @@ const stationMetadata = (
   stationId: number | string
 ): Promise<StationMetadata> => {
   return axios
-    .get(`https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${stationId}.json`, {
-      params: {
-        expand: 'details'
+    .get(
+      `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${stationId}.json`,
+      {
+        params: {
+          expand: "details",
+        },
       }
-    })
+    )
     .then(res => {
       if (!res || !res.data) {
-        throw new Error('Something went wrong.')
+        throw new Error("Something went wrong.");
       }
 
       if (!res.data.stations) {
-        throw new Error(`Could not get metadata for station ${stationId}.`)
+        throw new Error(`Could not get metadata for station ${stationId}.`);
       }
 
-      const { name, state, lat, lng } = res.data.stations[0]
+      const { name, state, lat, lng } = res.data.stations[0];
 
       return {
         id: stationId,
         name,
         state,
         latitude: lat,
-        longitude: lng
-      }
-    })
+        longitude: lng,
+      };
+    });
 };
 
 export default {
