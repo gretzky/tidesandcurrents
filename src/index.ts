@@ -78,19 +78,31 @@ const tidePredictions = (
 const stationMetadata = (
   stationId: number | string
 ): Promise<StationMetadata> => {
-  return get(stationId, {
-    product: "air_temperature",
-    date: "latest",
-  }).then(res => {
-    if (!res || !res.data) {
-      throw new Error("Something went wrong.");
-    }
-    if (!res.data.metadata) {
-      throw new Error(`Could not get metadata for station ${stationId}.`);
-    }
+  return axios
+    .get(`https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${stationId}.json`, {
+      params: {
+        expand: 'details'
+      }
+    })
+    .then(res => {
+      if (!res || !res.data) {
+        throw new Error('Something went wrong.')
+      }
 
-    return res.data.metadata;
-  });
+      if (!res.data.stations) {
+        throw new Error(`Could not get metadata for station ${stationId}.`)
+      }
+
+      const { name, state, lat, lng } = res.data.stations[0]
+
+      return {
+        id: stationId,
+        name,
+        state,
+        latitude: lat,
+        longitude: lng
+      }
+    })
 };
 
 export default {

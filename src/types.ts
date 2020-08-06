@@ -69,6 +69,7 @@ export interface ReturnData {
 export interface StationMetadata {
   id: number | string;
   name: string;
-  lat: string;
-  long: string;
+  state: string
+  latitude: string;
+  longitude: string;
 }

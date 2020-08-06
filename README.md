@@ -58,7 +58,8 @@ const stationMetadata = tidesandcurrents.stationMetadata(8410140)
 // {
 //   id: '8410140',
 //   name: 'Eastport',
-//   lat: '44.9046',
-//   long: '-66.9829'
+//   state: 'ME',
+//   latitude: '44.9046',
+//   longitude: '-66.9829'
 // }
 ```
