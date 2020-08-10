@@ -61,10 +61,10 @@ const unitSymbols = (system: MeasurementSystem): UnitSymbols => {
   const isImperial = system === Units.IMPERIAL;
 
   return {
-    degree: isImperial ? "°F" : "°C",
-    height: isImperial ? "ft" : "m",
-    speed: isImperial ? "kts" : "m/s",
-    pressure: "mb",
+    degree: isImperial ? "° F" : "° C",
+    height: isImperial ? " ft" : " m",
+    speed: isImperial ? " kts" : " m/s",
+    pressure: " mb",
   };
 };
 
@@ -84,7 +84,7 @@ const get = async (
     params: {
       station: stationId,
       format: format ?? "json",
-      time_zone: time_zone ?? TimeZones.LDT,
+      time_zone: time_zone ?? TimeZones.GST,
       ...rest,
     },
   });
@@ -229,7 +229,7 @@ const getCurrentProductValue = (
       time: returnData.t,
       rawValue: `${round(returnData.v)}`,
       /// @ts-ignore
-      value: `${round(returnData.v)} ${symbol[measurement]}`,
+      value: `${round(returnData.v)}${symbol[measurement]}`,
     };
   });
 };
