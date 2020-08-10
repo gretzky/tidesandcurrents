@@ -214,6 +214,14 @@ const getCurrentProductValue = (
     : baseParams;
 
   return get(stationId, params).then((res: AxiosResponse<ReturnData>) => {
+    if (!res || !res.data) {
+      throw new Error('Something went wrong.')
+    }
+
+    if (!res.data.data || !Array.isArray(res.data.data)) {
+      throw new Error(`Could not get ${product} for station ${stationId}.`)
+    }
+
     const returnData = res.data.data[0];
     const symbol = unitSymbols(unit);
 
