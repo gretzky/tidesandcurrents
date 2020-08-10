@@ -445,7 +445,7 @@ const sunlight = async (
   return suncalc.getTimes(date, latitude, longitude);
 };
 
-export {
+export default {
   get,
   tidePredictions,
   stationMetadata,
