@@ -1,7 +1,7 @@
 {
   "name": "tidesandcurrents",
   "author": "Sara Pope <sarafpope@gmail.com>",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/tidescurrents-api.esm.js",
