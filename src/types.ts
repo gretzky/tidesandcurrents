@@ -46,30 +46,30 @@ export enum Units {
 }
 
 export enum Symbols {
-  DEGREE = 'degree',
-  SPEED = 'speed',
-  HEIGHT = 'height',
-  PRESSURE = 'pressure'
+  DEGREE = "degree",
+  SPEED = "speed",
+  HEIGHT = "height",
+  PRESSURE = "pressure",
 }
 
 export enum MoonPhases {
-  NEW = 'new',
-  WAX_CRES = 'waxing crescent',
-  QUAR_CRES = 'quarter crescent',
-  WAX_GIBB = 'waxing gibbous',
-  FULL = 'full',
-  WAN_GIBB = 'waning gibbous',
-  LAST_QUAR = 'last quarter',
-  WAN_CRES = 'waning crescent'
+  NEW = "new",
+  WAX_CRES = "waxing crescent",
+  QUAR_CRES = "quarter crescent",
+  WAX_GIBB = "waxing gibbous",
+  FULL = "full",
+  WAN_GIBB = "waning gibbous",
+  LAST_QUAR = "last quarter",
+  WAN_CRES = "waning crescent",
 }
 
-export type MeasurementSystem = Units.IMPERIAL | Units.METRIC
+export type MeasurementSystem = Units.IMPERIAL | Units.METRIC;
 
 export interface UnitSymbols {
-  degree: string
-  height: string
-  speed: string
-  pressure: string
+  degree: string;
+  height: string;
+  speed: string;
+  pressure: string;
 }
 
 export interface Params {
@@ -90,14 +90,14 @@ export interface Params {
 export interface RawReturnData {
   t: string;
   v: string | number;
-  type?: string
+  type?: string;
 }
 
 export interface FormattedReturnData {
-  time: string
-  rawValue: number | string
-  value: string
-  type?: string
+  time: string;
+  rawValue: number | string;
+  value: string;
+  type?: string;
 }
 
 export interface StationMetadata {
@@ -109,48 +109,48 @@ export interface StationMetadata {
 }
 
 export interface ReturnData {
-  data: RawReturnData[]
+  data: RawReturnData[];
 }
 
 export interface RawWindData {
-  t: string
-  s: number
-  g: number
-  dr: string
+  t: string;
+  s: number;
+  g: number;
+  dr: string;
 }
 
 export interface RawWindReturnData {
-  data: RawWindData[]
+  data: RawWindData[];
 }
 
 export interface FormattedWindReturnData {
-  time: string
-  rawSpeed: number
-  speed: string
-  rawGust: number
-  gust: string
-  direction: string
+  time: string;
+  rawSpeed: number;
+  speed: string;
+  rawGust: number;
+  gust: string;
+  direction: string;
 }
 
 export interface Moonlight {
-  rise: Date
-  set: Date 
-  alwaysUp?: boolean
-  alwaysDown?: boolean
+  rise: Date;
+  set: Date;
+  alwaysUp?: boolean;
+  alwaysDown?: boolean;
 }
 
 export interface Sunlight {
-  sunrise: Date
-  sunriseEnd: Date
-  goldenHourEnd: Date
-  solarNoon: Date
-  sunsetStart: Date
-  sunset: Date
-  dusk: Date
-  nauticalDusk: Date
-  night: Date
-  nadir: Date
-  nightEnd: Date
-  nauticalDawn: Date
-  dawn: Date
+  sunrise: Date;
+  sunriseEnd: Date;
+  goldenHourEnd: Date;
+  solarNoon: Date;
+  sunsetStart: Date;
+  sunset: Date;
+  dusk: Date;
+  nauticalDusk: Date;
+  night: Date;
+  nadir: Date;
+  nightEnd: Date;
+  nauticalDawn: Date;
+  dawn: Date;
 }
