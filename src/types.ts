@@ -1,7 +1,7 @@
 export enum Products {
   WATER_LEVEL = "water_level",
   AIR_TEMP = "air_temperature",
-  WATER_TEMP = "water_temp",
+  WATER_TEMP = "water_temperature",
   WIND = "wind",
   AIR_PRESSURE = "air_pressure",
   AIR_GAP = "air_gap",
