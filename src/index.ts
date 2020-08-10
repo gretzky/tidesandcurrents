@@ -84,7 +84,7 @@ const get = async (
     params: {
       station: stationId,
       format: format ?? "json",
-      time_zone: time_zone ?? TimeZones.GST,
+      time_zone: time_zone ?? TimeZones.GMT,
       ...rest,
     },
   });

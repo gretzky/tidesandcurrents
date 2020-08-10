@@ -35,7 +35,7 @@ export enum Datum {
 }
 
 export enum TimeZones {
-  GST = "gst",
+  GMT = "gmt",
   LST = "lst",
   LDT = "lst_ldt",
 }
