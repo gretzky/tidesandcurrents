@@ -116,9 +116,7 @@ const tidePredictions = (
       throw new Error("Something went wrong.");
     }
     if (!res.data.predictions) {
-      throw new Error(
-        `Could not get tide predictions for station ${stationId}. Is the station ID correct?`
-      );
+      return null
     }
 
     const symbol = unitSymbols(unit);
@@ -166,7 +164,13 @@ const stationMetadata = (
       }
 
       if (!res.data.stations) {
-        throw new Error(`Could not get metadata for station ${stationId}.`);
+        return {
+          id: stationId,
+          name: null,
+          state: null,
+          latitude: null,
+          longitude: null
+        }
       }
 
       const { name, state, lat, lng } = res.data.stations[0];
@@ -219,7 +223,11 @@ const getCurrentProductValue = (
     }
 
     if (!res.data.data || !Array.isArray(res.data.data)) {
-      throw new Error(`Could not get ${product} for station ${stationId}.`);
+      return {
+        time: null,
+        rawValue: null,
+        value: null
+      }
     }
 
     const { t, v } = res.data.data[0];
@@ -333,7 +341,14 @@ const currentWind = (
     }
 
     if (!res.data.data || !Array.isArray(res.data.data)) {
-      throw new Error(`Could not get wind for station ${stationId}.`);
+      return {
+        time: null,
+        rawSpeed: null,
+        speed: null,
+        rawGust: null,
+        gust: null,
+        direction: null
+      }
     }
 
     const { t, s, g, dr } = res.data.data[0];
@@ -444,7 +459,10 @@ const moonlight = async (
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
-    throw new Error(`Could not get moon info for station ${stationId}`);
+    return {
+      rise: null,
+      set: null
+    }
   }
 
   return suncalc.getMoonTimes(date, latitude, longitude);
@@ -463,7 +481,21 @@ const sunlight = async (
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
-    throw new Error(`Could not get sun info for station ${stationId}`);
+    return {
+      sunrise: null,
+      sunriseEnd: null,
+      goldenHourEnd: null,
+      solarNoon: null,
+      sunsetStart: null,
+      sunset: null,
+      dusk: null,
+      nauticalDusk: null,
+      night: null,
+      nadir: null,
+      nightEnd: null,
+      nauticalDawn: null,
+      dawn: null
+    }
   }
 
   return suncalc.getTimes(date, latitude, longitude);

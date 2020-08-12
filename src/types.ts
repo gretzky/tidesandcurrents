@@ -94,9 +94,9 @@ export interface RawReturnData {
 }
 
 export interface FormattedReturnData {
-  time: string;
-  rawValue: number | string;
-  value: string;
+  time: string | null;
+  rawValue: number | string | null;
+  value: string | null;
   type?: string;
 }
 
@@ -125,33 +125,33 @@ export interface RawWindReturnData {
 }
 
 export interface FormattedWindReturnData {
-  time: string;
-  rawSpeed: number;
-  speed: string;
-  rawGust: number;
-  gust: string;
-  direction: string;
+  time: string | null;
+  rawSpeed: number | null;
+  speed: string | null;
+  rawGust: number | null;
+  gust: string | null;
+  direction: string | null;
 }
 
 export interface Moonlight {
-  rise: Date;
-  set: Date;
+  rise: Date | null;
+  set: Date | null;
   alwaysUp?: boolean;
   alwaysDown?: boolean;
 }
 
 export interface Sunlight {
-  sunrise: Date;
-  sunriseEnd: Date;
-  goldenHourEnd: Date;
-  solarNoon: Date;
-  sunsetStart: Date;
-  sunset: Date;
-  dusk: Date;
-  nauticalDusk: Date;
-  night: Date;
-  nadir: Date;
-  nightEnd: Date;
-  nauticalDawn: Date;
-  dawn: Date;
+  sunrise: Date | null;
+  sunriseEnd: Date | null;
+  goldenHourEnd: Date | null;
+  solarNoon: Date | null;
+  sunsetStart: Date | null;
+  sunset: Date | null;
+  dusk: Date | null;
+  nauticalDusk: Date | null;
+  night: Date | null;
+  nadir: Date | null;
+  nightEnd: Date | null;
+  nauticalDawn: Date | null;
+  dawn: Date | null;
 }
