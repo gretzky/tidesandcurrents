@@ -116,7 +116,7 @@ const tidePredictions = (
       throw new Error("Something went wrong.");
     }
     if (!res.data.predictions) {
-      return null
+      return null;
     }
 
     const symbol = unitSymbols(unit);
@@ -169,8 +169,8 @@ const stationMetadata = (
           name: null,
           state: null,
           latitude: null,
-          longitude: null
-        }
+          longitude: null,
+        };
       }
 
       const { name, state, lat, lng } = res.data.stations[0];
@@ -226,8 +226,8 @@ const getCurrentProductValue = (
       return {
         time: null,
         rawValue: null,
-        value: null
-      }
+        value: null,
+      };
     }
 
     const { t, v } = res.data.data[0];
@@ -347,8 +347,8 @@ const currentWind = (
         speed: null,
         rawGust: null,
         gust: null,
-        direction: null
-      }
+        direction: null,
+      };
     }
 
     const { t, s, g, dr } = res.data.data[0];
@@ -461,8 +461,8 @@ const moonlight = async (
   if (!latitude || !longitude) {
     return {
       rise: null,
-      set: null
-    }
+      set: null,
+    };
   }
 
   return suncalc.getMoonTimes(date, latitude, longitude);
@@ -494,8 +494,8 @@ const sunlight = async (
       nadir: null,
       nightEnd: null,
       nauticalDawn: null,
-      dawn: null
-    }
+      dawn: null,
+    };
   }
 
   return suncalc.getTimes(date, latitude, longitude);
