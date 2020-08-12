@@ -100,8 +100,8 @@ const get = async (
  */
 const tidePredictions = (
   stationId: number | string,
-  date?: string,
-  units?: MeasurementSystem
+  units?: MeasurementSystem,
+  date?: string
 ): Promise<FormattedReturnData[]> => {
   const unit = units ?? Units.IMPERIAL;
 
