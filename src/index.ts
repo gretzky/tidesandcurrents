@@ -113,12 +113,19 @@ const tidePredictions = (
     units: unit,
   }).then(res => {
     if (!res || !res.data) {
-      throw new Error("Something went wrong.");
+      return {
+        error: "Something went wrong. Sorry about that :(",
+      };
     }
+
+    if (res.data.error) {
+      return { error: res.data.error };
+    }
+
     if (!res.data.predictions) {
-      throw new Error(
-        `Could not get tide predictions for station ${stationId}. Is the station ID correct?`
-      );
+      return {
+        error: `Could not get tide predictions for station ${stationId}. Is the station ID correct?`,
+      };
     }
 
     const symbol = unitSymbols(unit);
@@ -162,11 +169,19 @@ const stationMetadata = (
     )
     .then(res => {
       if (!res || !res.data) {
-        throw new Error("Something went wrong.");
+        return {
+          error: "Something went wrong. Sorry about that :(",
+        };
+      }
+
+      if (res.data.error) {
+        return { error: res.data.error };
       }
 
       if (!res.data.stations) {
-        throw new Error(`Could not get metadata for station ${stationId}.`);
+        return {
+          error: `Could not get metadata for station ${stationId}.`,
+        };
       }
 
       const { name, state, lat, lng } = res.data.stations[0];
@@ -215,11 +230,19 @@ const getCurrentProductValue = (
 
   return get(stationId, params).then((res: AxiosResponse<ReturnData>) => {
     if (!res || !res.data) {
-      throw new Error("Something went wrong.");
+      return {
+        error: "Something went wrong. Sorry about that :(",
+      };
+    }
+
+    if (res.data.error) {
+      return { error: res.data.error };
     }
 
     if (!res.data.data || !Array.isArray(res.data.data)) {
-      throw new Error(`Could not get ${product} for station ${stationId}.`);
+      return {
+        error: `Could not get ${product} for station ${stationId}.`,
+      };
     }
 
     const returnData = res.data.data[0];
@@ -328,6 +351,22 @@ const currentWind = (
     date: "latest",
     units: unit,
   }).then((res: AxiosResponse<RawWindReturnData>) => {
+    if (!res || !res.data) {
+      return {
+        error: "Something went wrong. Sorry about that :(",
+      };
+    }
+
+    if (res.data.error) {
+      return { error: res.data.error };
+    }
+
+    if (!res.data.data) {
+      return {
+        error: `Could not get wind information for station ${stationId}.`,
+      };
+    }
+
     const returnData = res.data.data[0];
     const symbol = unitSymbols(unit);
 
@@ -435,6 +474,12 @@ const moonlight = async (
 ): Promise<Moonlight> => {
   const { latitude, longitude } = await stationMetadata(stationId);
 
+  if (!latitude || !longitude) {
+    return {
+      error: `Could not get moon info for station ${stationId}.`,
+    };
+  }
+
   return suncalc.getMoonTimes(date, latitude, longitude);
 };
 
@@ -449,6 +494,12 @@ const sunlight = async (
   date: Date = new Date(Date.now())
 ): Promise<Sunlight> => {
   const { latitude, longitude } = await stationMetadata(stationId);
+
+  if (!latitude || !longitude) {
+    return {
+      error: `Could not get sun info for station ${stationId}.`,
+    };
+  }
 
   return suncalc.getTimes(date, latitude, longitude);
 };
