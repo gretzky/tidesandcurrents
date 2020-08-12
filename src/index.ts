@@ -222,9 +222,8 @@ const getCurrentProductValue = (
       throw new Error(`Could not get ${product} for station ${stationId}.`);
     }
 
-    const { t, v } = res.data.data[0]
+    const { t, v } = res.data.data[0];
     const symbol = unitSymbols(unit);
-
 
     return {
       time: t,
@@ -445,7 +444,7 @@ const moonlight = async (
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
-    throw new Error(`Could not get moon info for station ${stationId}`)
+    throw new Error(`Could not get moon info for station ${stationId}`);
   }
 
   return suncalc.getMoonTimes(date, latitude, longitude);
@@ -464,7 +463,7 @@ const sunlight = async (
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
-    throw new Error(`Could not get sun info for station ${stationId}`)
+    throw new Error(`Could not get sun info for station ${stationId}`);
   }
 
   return suncalc.getTimes(date, latitude, longitude);

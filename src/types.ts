@@ -155,4 +155,3 @@ export interface Sunlight {
   nauticalDawn: Date;
   dawn: Date;
 }
-
