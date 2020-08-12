@@ -14,7 +14,6 @@ import {
   RawReturnData,
   ReturnData,
   FormattedWindReturnData,
-  RawWindReturnData,
   MoonPhases,
   Sunlight,
   Moonlight,
@@ -122,7 +121,7 @@ const tidePredictions = (
       return { error: res.data.error };
     }
 
-    if (!res.data.predictions) {
+    if (!res.data.predictions || !Array.isArray(res.data.predictions)) {
       return {
         error: `Could not get tide predictions for station ${stationId}. Is the station ID correct?`,
       };
@@ -350,7 +349,7 @@ const currentWind = (
     product: Products.WIND,
     date: "latest",
     units: unit,
-  }).then((res: AxiosResponse<RawWindReturnData>) => {
+  }).then((res: AxiosResponse) => {
     if (!res || !res.data) {
       return {
         error: "Something went wrong. Sorry about that :(",
@@ -361,7 +360,7 @@ const currentWind = (
       return { error: res.data.error };
     }
 
-    if (!res.data.data) {
+    if (!res.data.data || !Array.isArray(res.data.data)) {
       return {
         error: `Could not get wind information for station ${stationId}.`,
       };
@@ -371,12 +370,12 @@ const currentWind = (
     const symbol = unitSymbols(unit);
 
     return {
-      time: returnData.t,
-      rawSpeed: returnData.s,
-      speed: `${returnData.s} ${symbol.speed}`,
-      rawGust: returnData.g,
-      gust: `${returnData.g} ${symbol.speed}`,
-      direction: returnData.dr,
+      time: returnData?.t,
+      rawSpeed: returnData?.s,
+      speed: `${returnData?.s} ${symbol?.speed}`,
+      rawGust: returnData?.g,
+      gust: `${returnData?.g} ${symbol?.speed}`,
+      direction: returnData?.dr,
     };
   });
 };
