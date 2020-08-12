@@ -115,13 +115,10 @@ const tidePredictions = (
     if (!res || !res.data) {
       throw new Error("Something went wrong.");
     }
-    if (!res.data.predictions) {
-      return null;
-    }
 
     const symbol = unitSymbols(unit);
 
-    return res.data.predictions.map((prediction: RawReturnData) => ({
+    return res.data?.predictions?.map((prediction: RawReturnData) => ({
       time: prediction.t,
       rawValue: prediction.v,
       value: `${prediction.v}${symbol.height}`,
