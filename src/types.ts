@@ -90,43 +90,37 @@ export interface Params {
 export interface RawReturnData {
   t: string;
   v: string | number;
-  type?: string;
-  error?: any;
+  type: string;
 }
 
 export interface FormattedReturnData {
-  time?: string;
-  rawValue?: number | string;
-  value?: string;
+  time: string;
+  rawValue: number | string;
+  value: string;
   type?: string;
-  error?: any;
 }
 
 export interface StationMetadata {
-  id?: number | string;
-  name?: string;
-  state?: string;
-  latitude?: number;
-  longitude?: number;
-  error?: any;
+  id: number | string;
+  name: string;
+  state: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface ReturnData {
   data: RawReturnData[];
-  error?: any;
 }
 
 export interface RawWindData {
-  t?: string;
-  s?: number;
-  g?: number;
-  dr?: string;
-  error?: any;
+  t: string;
+  s: number;
+  g: number;
+  dr: string;
 }
 
 export interface RawWindReturnData {
   data: RawWindData[];
-  error?: any;
 }
 
 export interface FormattedWindReturnData {

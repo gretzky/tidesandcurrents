@@ -12,11 +12,10 @@ import {
   FormattedReturnData,
   StationMetadata,
   RawReturnData,
-  ReturnData,
-  FormattedWindReturnData,
   MoonPhases,
   Sunlight,
   Moonlight,
+  FormattedWindReturnData,
 } from "./types";
 
 /**
@@ -101,7 +100,7 @@ const tidePredictions = (
   stationId: number | string,
   date?: string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData[]> => {
+): Promise<FormattedReturnData[] | { error: string }> => {
   const unit = units ?? Units.IMPERIAL;
 
   return get(stationId, {
@@ -156,7 +155,7 @@ const tidePredictions = (
  */
 const stationMetadata = (
   stationId: number | string
-): Promise<StationMetadata> => {
+): Promise<StationMetadata | { error: string }> => {
   return axios
     .get(
       `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${stationId}.json`,
@@ -212,7 +211,7 @@ const getCurrentProductValue = (
   measurement: string,
   units?: MeasurementSystem,
   datum?: string
-): Promise<FormattedReturnData> => {
+): Promise<FormattedReturnData | { error: string }> => {
   const unit = units ?? Units.IMPERIAL;
 
   const baseParams = {
@@ -227,7 +226,7 @@ const getCurrentProductValue = (
       }
     : baseParams;
 
-  return get(stationId, params).then((res: AxiosResponse<ReturnData>) => {
+  return get(stationId, params).then((res: AxiosResponse) => {
     if (!res || !res.data) {
       return {
         error: "Something went wrong. Sorry about that :(",
@@ -249,7 +248,7 @@ const getCurrentProductValue = (
 
     return {
       time: returnData.t,
-      rawValue: `${round(returnData.v)}`,
+      rawValue: `${round(returnData?.v)}`,
       /// @ts-ignore
       value: `${round(returnData.v)}${symbol[measurement]}`,
     };
@@ -267,7 +266,7 @@ const getCurrentProductValue = (
 const currentWaterLevel = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData> =>
+): Promise<FormattedReturnData | { error: string }> =>
   getCurrentProductValue(
     Products.WATER_LEVEL,
     stationId,
@@ -287,7 +286,7 @@ const currentWaterLevel = (
 const currentAirTemp = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData> =>
+): Promise<FormattedReturnData | { error: string }> =>
   getCurrentProductValue(Products.AIR_TEMP, stationId, Symbols.DEGREE, units);
 
 /**
@@ -301,7 +300,7 @@ const currentAirTemp = (
 const currentWaterTemp = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData> =>
+): Promise<FormattedReturnData | { error: string }> =>
   getCurrentProductValue(Products.WATER_TEMP, stationId, Symbols.DEGREE, units);
 
 /**
@@ -315,7 +314,7 @@ const currentWaterTemp = (
 const currentAirPressure = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData> =>
+): Promise<FormattedReturnData | { error: string }> =>
   getCurrentProductValue(
     Products.AIR_PRESSURE,
     stationId,
@@ -342,14 +341,14 @@ const currentAirPressure = (
 const currentWind = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedWindReturnData> => {
+): Promise<FormattedWindReturnData | { error: string }> => {
   const unit = units ?? Units.IMPERIAL;
 
   return get(stationId, {
     product: Products.WIND,
     date: "latest",
     units: unit,
-  }).then((res: AxiosResponse) => {
+  }).then(res => {
     if (!res || !res.data) {
       return {
         error: "Something went wrong. Sorry about that :(",
@@ -470,7 +469,8 @@ const moonPhase = (
 const moonlight = async (
   stationId: number | string,
   date: Date = new Date(Date.now())
-): Promise<Moonlight> => {
+): Promise<Moonlight | { error: string }> => {
+  /// @ts-ignore
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
@@ -491,7 +491,8 @@ const moonlight = async (
 const sunlight = async (
   stationId: number | string,
   date: Date = new Date(Date.now())
-): Promise<Sunlight> => {
+): Promise<Sunlight | { error: string }> => {
+  /// @ts-ignore
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
