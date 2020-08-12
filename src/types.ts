@@ -101,11 +101,12 @@ export interface FormattedReturnData {
 }
 
 export interface StationMetadata {
-  id: number | string;
-  name: string;
-  state: string;
-  latitude: number;
-  longitude: number;
+  id?: number | string;
+  name?: string;
+  state?: string;
+  latitude?: number;
+  longitude?: number;
+  error?: string | null;
 }
 
 export interface ReturnData {
@@ -154,3 +155,4 @@ export interface Sunlight {
   nauticalDawn: Date;
   dawn: Date;
 }
+

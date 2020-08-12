@@ -12,10 +12,12 @@ import {
   FormattedReturnData,
   StationMetadata,
   RawReturnData,
+  ReturnData,
+  FormattedWindReturnData,
+  RawWindReturnData,
   MoonPhases,
   Sunlight,
   Moonlight,
-  FormattedWindReturnData,
 } from "./types";
 
 /**
@@ -100,7 +102,7 @@ const tidePredictions = (
   stationId: number | string,
   date?: string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData[] | { error: string }> => {
+): Promise<FormattedReturnData[]> => {
   const unit = units ?? Units.IMPERIAL;
 
   return get(stationId, {
@@ -111,19 +113,12 @@ const tidePredictions = (
     units: unit,
   }).then(res => {
     if (!res || !res.data) {
-      return {
-        error: "Something went wrong. Sorry about that :(",
-      };
+      throw new Error("Something went wrong.");
     }
-
-    if (res.data.error) {
-      return { error: res.data.error };
-    }
-
-    if (!res.data.predictions || !Array.isArray(res.data.predictions)) {
-      return {
-        error: `Could not get tide predictions for station ${stationId}. Is the station ID correct?`,
-      };
+    if (!res.data.predictions) {
+      throw new Error(
+        `Could not get tide predictions for station ${stationId}. Is the station ID correct?`
+      );
     }
 
     const symbol = unitSymbols(unit);
@@ -155,7 +150,7 @@ const tidePredictions = (
  */
 const stationMetadata = (
   stationId: number | string
-): Promise<StationMetadata | { error: string }> => {
+): Promise<StationMetadata> => {
   return axios
     .get(
       `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${stationId}.json`,
@@ -167,19 +162,11 @@ const stationMetadata = (
     )
     .then(res => {
       if (!res || !res.data) {
-        return {
-          error: "Something went wrong. Sorry about that :(",
-        };
-      }
-
-      if (res.data.error) {
-        return { error: res.data.error };
+        throw new Error("Something went wrong.");
       }
 
       if (!res.data.stations) {
-        return {
-          error: `Could not get metadata for station ${stationId}.`,
-        };
+        throw new Error(`Could not get metadata for station ${stationId}.`);
       }
 
       const { name, state, lat, lng } = res.data.stations[0];
@@ -211,7 +198,7 @@ const getCurrentProductValue = (
   measurement: string,
   units?: MeasurementSystem,
   datum?: string
-): Promise<FormattedReturnData | { error: string }> => {
+): Promise<FormattedReturnData> => {
   const unit = units ?? Units.IMPERIAL;
 
   const baseParams = {
@@ -226,31 +213,24 @@ const getCurrentProductValue = (
       }
     : baseParams;
 
-  return get(stationId, params).then((res: AxiosResponse) => {
+  return get(stationId, params).then((res: AxiosResponse<ReturnData>) => {
     if (!res || !res.data) {
-      return {
-        error: "Something went wrong. Sorry about that :(",
-      };
-    }
-
-    if (res.data.error) {
-      return { error: res.data.error };
+      throw new Error("Something went wrong.");
     }
 
     if (!res.data.data || !Array.isArray(res.data.data)) {
-      return {
-        error: `Could not get ${product} for station ${stationId}.`,
-      };
+      throw new Error(`Could not get ${product} for station ${stationId}.`);
     }
 
-    const returnData = res.data.data[0];
+    const { t, v } = res.data.data[0]
     const symbol = unitSymbols(unit);
 
+
     return {
-      time: returnData.t,
-      rawValue: `${round(returnData?.v)}`,
+      time: t,
+      rawValue: `${round(v)}`,
       /// @ts-ignore
-      value: `${round(returnData.v)}${symbol[measurement]}`,
+      value: `${round(v)}${symbol[measurement]}`,
     };
   });
 };
@@ -266,7 +246,7 @@ const getCurrentProductValue = (
 const currentWaterLevel = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData | { error: string }> =>
+): Promise<FormattedReturnData> =>
   getCurrentProductValue(
     Products.WATER_LEVEL,
     stationId,
@@ -286,7 +266,7 @@ const currentWaterLevel = (
 const currentAirTemp = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData | { error: string }> =>
+): Promise<FormattedReturnData> =>
   getCurrentProductValue(Products.AIR_TEMP, stationId, Symbols.DEGREE, units);
 
 /**
@@ -300,7 +280,7 @@ const currentAirTemp = (
 const currentWaterTemp = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData | { error: string }> =>
+): Promise<FormattedReturnData> =>
   getCurrentProductValue(Products.WATER_TEMP, stationId, Symbols.DEGREE, units);
 
 /**
@@ -314,7 +294,7 @@ const currentWaterTemp = (
 const currentAirPressure = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedReturnData | { error: string }> =>
+): Promise<FormattedReturnData> =>
   getCurrentProductValue(
     Products.AIR_PRESSURE,
     stationId,
@@ -341,40 +321,32 @@ const currentAirPressure = (
 const currentWind = (
   stationId: number | string,
   units?: MeasurementSystem
-): Promise<FormattedWindReturnData | { error: string }> => {
+): Promise<FormattedWindReturnData> => {
   const unit = units ?? Units.IMPERIAL;
 
   return get(stationId, {
     product: Products.WIND,
     date: "latest",
     units: unit,
-  }).then(res => {
+  }).then((res: AxiosResponse<RawWindReturnData>) => {
     if (!res || !res.data) {
-      return {
-        error: "Something went wrong. Sorry about that :(",
-      };
-    }
-
-    if (res.data.error) {
-      return { error: res.data.error };
+      throw new Error("Something went wrong.");
     }
 
     if (!res.data.data || !Array.isArray(res.data.data)) {
-      return {
-        error: `Could not get wind information for station ${stationId}.`,
-      };
+      throw new Error(`Could not get wind for station ${stationId}.`);
     }
 
-    const returnData = res.data.data[0];
+    const { t, s, g, dr } = res.data.data[0];
     const symbol = unitSymbols(unit);
 
     return {
-      time: returnData?.t,
-      rawSpeed: returnData?.s,
-      speed: `${returnData?.s} ${symbol?.speed}`,
-      rawGust: returnData?.g,
-      gust: `${returnData?.g} ${symbol?.speed}`,
-      direction: returnData?.dr,
+      time: t,
+      rawSpeed: s,
+      speed: `${s} ${symbol.speed}`,
+      rawGust: g,
+      gust: `${g} ${symbol.speed}`,
+      direction: dr,
     };
   });
 };
@@ -469,14 +441,11 @@ const moonPhase = (
 const moonlight = async (
   stationId: number | string,
   date: Date = new Date(Date.now())
-): Promise<Moonlight | { error: string }> => {
-  /// @ts-ignore
+): Promise<Moonlight> => {
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
-    return {
-      error: `Could not get moon info for station ${stationId}.`,
-    };
+    throw new Error(`Could not get moon info for station ${stationId}`)
   }
 
   return suncalc.getMoonTimes(date, latitude, longitude);
@@ -491,14 +460,11 @@ const moonlight = async (
 const sunlight = async (
   stationId: number | string,
   date: Date = new Date(Date.now())
-): Promise<Sunlight | { error: string }> => {
-  /// @ts-ignore
+): Promise<Sunlight> => {
   const { latitude, longitude } = await stationMetadata(stationId);
 
   if (!latitude || !longitude) {
-    return {
-      error: `Could not get sun info for station ${stationId}.`,
-    };
+    throw new Error(`Could not get sun info for station ${stationId}`)
   }
 
   return suncalc.getTimes(date, latitude, longitude);
