@@ -63,8 +63,6 @@ export enum MoonPhases {
   WAN_CRES = "waning crescent",
 }
 
-export type MeasurementSystem = Units.IMPERIAL | Units.METRIC;
-
 export interface UnitSymbols {
   degree: string;
   height: string;
@@ -76,7 +74,7 @@ export interface Params {
   product: string;
   format?: "json" | "csv" | "xml";
   time_zone?: "gmt" | "lst" | "lst_ldt";
-  units?: "english" | "metric";
+  units?: string;
   date?: string;
   begin_date?: string;
   end_date?: string;
