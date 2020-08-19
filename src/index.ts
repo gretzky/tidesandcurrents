@@ -100,23 +100,21 @@ const get = async (
  */
 const tidePredictions = (
   stationId: number | string,
-  units?: MeasurementSystem,
+  units: MeasurementSystem,
   date?: string
 ): Promise<FormattedReturnData[]> => {
-  const unit = units ?? Units.IMPERIAL;
-
   return get(stationId, {
     product: Products.TIDE_PREDICTIONS,
     date: date ?? "today",
     datum: Datum.MLLW,
     interval: "hilo",
-    units: unit,
+    units,
   }).then(res => {
     if (!res || !res.data) {
       throw new Error("Something went wrong.");
     }
 
-    const symbol = unitSymbols(unit);
+    const symbol = unitSymbols(units);
 
     return res.data?.predictions?.map((prediction: RawReturnData) => ({
       time: prediction.t,
@@ -197,15 +195,13 @@ const getCurrentProductValue = (
   product: string,
   stationId: number | string,
   measurement: string,
-  units?: MeasurementSystem,
+  units: MeasurementSystem,
   datum?: string
 ): Promise<FormattedReturnData> => {
-  const unit = units ?? Units.IMPERIAL;
-
   const baseParams = {
     product,
     date: "latest",
-    units: unit,
+    units: units,
   };
   const params = datum
     ? {
@@ -228,7 +224,7 @@ const getCurrentProductValue = (
     }
 
     const { t, v } = res.data.data[0];
-    const symbol = unitSymbols(unit);
+    const symbol = unitSymbols(units);
 
     return {
       time: t,
@@ -324,14 +320,12 @@ const currentAirPressure = (
  */
 const currentWind = (
   stationId: number | string,
-  units?: MeasurementSystem
+  units: MeasurementSystem
 ): Promise<FormattedWindReturnData> => {
-  const unit = units ?? Units.IMPERIAL;
-
   return get(stationId, {
     product: Products.WIND,
     date: "latest",
-    units: unit,
+    units,
   }).then((res: AxiosResponse<RawWindReturnData>) => {
     if (!res || !res.data) {
       throw new Error("Something went wrong.");
@@ -349,7 +343,7 @@ const currentWind = (
     }
 
     const { t, s, g, dr } = res.data.data[0];
-    const symbol = unitSymbols(unit);
+    const symbol = unitSymbols(units);
 
     return {
       time: t,
