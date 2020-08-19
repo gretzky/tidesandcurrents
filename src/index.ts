@@ -7,7 +7,6 @@ import {
   Datum,
   Units,
   Symbols,
-  MeasurementSystem,
   UnitSymbols,
   FormattedReturnData,
   StationMetadata,
@@ -57,7 +56,7 @@ const now: string = new Date()
  *
  * @param system - system of measurement to use (imperial or metric)
  */
-const unitSymbols = (system: MeasurementSystem): UnitSymbols => {
+const unitSymbols = (system: string): UnitSymbols => {
   const isImperial = system === Units.IMPERIAL;
 
   return {
@@ -100,7 +99,7 @@ const get = async (
  */
 const tidePredictions = (
   stationId: number | string,
-  units: MeasurementSystem,
+  units: string,
   date?: string
 ): Promise<FormattedReturnData[]> => {
   return get(stationId, {
@@ -195,7 +194,7 @@ const getCurrentProductValue = (
   product: string,
   stationId: number | string,
   measurement: string,
-  units: MeasurementSystem,
+  units: string,
   datum?: string
 ): Promise<FormattedReturnData> => {
   const baseParams = {
@@ -245,7 +244,7 @@ const getCurrentProductValue = (
  */
 const currentWaterLevel = (
   stationId: number | string,
-  units?: MeasurementSystem
+  units: string
 ): Promise<FormattedReturnData> =>
   getCurrentProductValue(
     Products.WATER_LEVEL,
@@ -265,7 +264,7 @@ const currentWaterLevel = (
  */
 const currentAirTemp = (
   stationId: number | string,
-  units?: MeasurementSystem
+  units: string
 ): Promise<FormattedReturnData> =>
   getCurrentProductValue(Products.AIR_TEMP, stationId, Symbols.DEGREE, units);
 
@@ -279,7 +278,7 @@ const currentAirTemp = (
  */
 const currentWaterTemp = (
   stationId: number | string,
-  units?: MeasurementSystem
+  units: string
 ): Promise<FormattedReturnData> =>
   getCurrentProductValue(Products.WATER_TEMP, stationId, Symbols.DEGREE, units);
 
@@ -293,7 +292,7 @@ const currentWaterTemp = (
  */
 const currentAirPressure = (
   stationId: number | string,
-  units?: MeasurementSystem
+  units: string
 ): Promise<FormattedReturnData> =>
   getCurrentProductValue(
     Products.AIR_PRESSURE,
@@ -320,7 +319,7 @@ const currentAirPressure = (
  */
 const currentWind = (
   stationId: number | string,
-  units: MeasurementSystem
+  units: string
 ): Promise<FormattedWindReturnData> => {
   return get(stationId, {
     product: Products.WIND,
